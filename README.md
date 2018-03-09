@@ -7,11 +7,11 @@ I you have suggestions for modifications, please open an issue.
 
 <!--ts-->
    * [1. Setting up the partitions](#1-setting-up-the-partitions)
-   * [2. Install package manager](#2-install-package-manager)
+   * [2. Installing the package manager](#2-installing-the-package-manager)
       * [2.1 (Optional) Set up and configure zsh](#21-optional-set-up-and-configure-zsh)
-      * [2.2 Enable parallel compiling](#22-enable-parallel-compiling)
+      * [2.2 Enabling parallel compiling](#22-enabling-parallel-compiling)
    * [3. System related](#3-system-related)
-      * [3.1 Install system libraries](#31-install-system-libraries)
+      * [3.1 Installing system libraries](#31-installing-system-libraries)
       * [3.2 Apps](#32-apps)
    * [4. R](#4-r)
       * [4.1 General](#41-general)
@@ -22,13 +22,13 @@ I you have suggestions for modifications, please open an issue.
    * [5. Accessing remote servers](#5-accessing-remote-servers)
    * [6. Desktop related](#6-desktop-related)
       * [KDE](#kde)
-   * [7. Battery life optimization](#7-battery-life-optimization)
+   * [7. Laptop battery life optimization](#7-laptop-battery-life-optimization)
    * [8. Additional stuff](#8-additional-stuff)
       * [8.1 arara](#81-arara)
       * [8.2 latexindent.pl: Required perl modules](#82-latexindentpl-required-perl-modules)
       * [8.3 Editor schemes](#83-editor-schemes)
 
-<!-- Added by: pjs, at: 2018-03-10T00:41+01:00 -->
+<!-- Added by: pjs, at: 2018-03-10T00:55+01:00 -->
 
 <!--te-->
 
@@ -54,7 +54,7 @@ There are many concepts on how to partition a Linux system correctly. The follow
 3. With the remaining space create "home". Mount point: `/home`. Format: `ext4`
 
 
-# 2. Install package manager
+# 2. Installing the package manager
 
 I prefer `trizen`. 
 Here is a list ([AUR helpers - ArchWiki](https://wiki.archlinux.org/index.php/AUR_helpers)) comparing more alternatives. 
@@ -74,9 +74,12 @@ In `~/.config/trizen/trizen.conf` set "noedit" to "1" to not being prompted to e
 
 (Optional) [GitHub - gavinlyonsrepo/cylon: Updates, maintenance, backups and system checks in a TUI menu driven bash shell script for an Arch based Linux distro](https://github.com/gavinlyonsrepo/cylon) -> Wrapper around `trizen`.
 
-## 2.1 (Optional) Set up and configure zsh 
+## 2.1 (Optional) Set up and configure `zsh`
 
-The `zsh` (Z shell) is an alternative to the default installed `bash`(Bourne-again Shell). It has several advantages (file globbing, visual appearance, etc.).
+The `zsh` (Z-shell) is an alternative to the default installed `bash`(Bourne-again Shell). 
+It has several advantages (file globbing, visual appearance, etc.).
+You can of course also stick with `bash`.
+However, then you need to adapt the following script to make it work with `bash` if you want to use all the defined helper functions.
 
 To set it up, do the following (see [GitHub - sorin-ionescu/prezto: The configuration framework for Zsh](https://github.com/sorin-ionescu/prezto).
 First, install the "Z-shell": `trizen zsh` and use it: `zsh`.
@@ -93,6 +96,9 @@ chsh -s /bin/zsh
 ```
 
 Logout/login.
+
+(I prefer using the `agnoster` theme. 
+Simply set `theme: agnoster` in line 116 of `~/.zpreztorc`.)
 
 Afterwards set up some custom wrapper functions (`aliases`) around `trizen` to simplify usage:
 
@@ -129,7 +135,8 @@ Check [GitHub - trizen/trizen: Lightweight AUR Package Manager](https://github.c
 * `pac install <pkg>`: Install the specified package (if it exists) and move it into `~/pkgs`.
 * `pac search <pkg>`: Executes a search with the specified `<pkg>` returning all matches. You can then type a number of the package you want to install. Package will be moved to `~/pkgs`.
 * `pac update`: Update all installed packages (from both Arch repos and AUR). Shows packages which are marked as "out-of-date" by the community.
-* `pac update-git`: Updates all packages installed from `git`. Note: These are usually build from source and certain packages may take some time to install. Don't do that daily.
+* `pac update-git`: Updates all packages installed from `git`. 
+Note: These are usually build from source and certain packages may take some time to install. Don't do that daily.
 
 **Note:** Git packages will never update automatically as they are just a snapshot build of the (at the time of installation) most recent state of the respective repository. 
 So think twice if you need a git package as it is in your responsibility to update it. 
@@ -140,8 +147,7 @@ It will move all built packages (`<package.tar.xz>`) into `~/pkgs`.
 This has the advantage that you do not need to rebuild a package that took a long time to install if you want to re-install it - just do a `pacman -U ~/pkgs/<package.tar.xz>`. 
 See [section 3.2](https://github.com/pat-s/antergos_setup_guide#32-apps) for a handy use case.
 
-
-## 2.2 Enable parallel compiling
+## 2.2 Enabling parallel compiling
 
 Compiling packages from source can take some time. 
 To speed up the process by enabling parallel compiling, set the `MAKEVARS` variable in `/etc/makepkg.conf`:
@@ -152,7 +158,7 @@ This will use all available cores on your machine for compiling.
 
 # 3. System related
 
-## 3.1 Install system libraries
+## 3.1 Installing system libraries
 
 For the following install calls, you can either use `trizen` or (if you added the `zsh` wrapper functions above) `pac`.
 While calling `trizen <package>` will first do a search in AUR and then install the package, the complementary function for this would be `pac search <package>`. Calling `pac install` will directly install the given package.
@@ -296,7 +302,7 @@ Reboot.
 If you want to use an automatic login to a VPN and the networkmanager-daemon (e.g. Openconnect) does not store your password, try the `network-manager-applet` package. 
 It is the GNOME network-manager and has for some reason no problems with storing the password.
 
-# 7. Battery life optimization
+# 7. Laptop battery life optimization
 
 Although the Linux kernel has a lot of power saving options, they are not all enabled by default.
 
