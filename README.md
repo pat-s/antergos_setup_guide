@@ -1,9 +1,36 @@
-# Last update: March 2018
+**Last update: March 2018**
 
 This guide does not claim to be complete and only reflects my personal view on how to setup a working Arch Linux system tailored to data science, R and LaTeX usage. 
 I you have suggestions for modifications, please open an issue.
 
-# Antergos/Arch Linux setup guide
+# Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis
+
+<!--ts-->
+   * [1. Setting up the partitions](#1-setting-up-the-partitions)
+   * [2. Install package manager](#2-install-package-manager)
+      * [2.1 (Optional) Set up and configure zsh](#21-optional-set-up-and-configure-zsh)
+      * [2.2 Enable parallel compiling](#22-enable-parallel-compiling)
+   * [3. System related](#3-system-related)
+      * [3.1 Install system libraries](#31-install-system-libraries)
+      * [3.2 Apps](#32-apps)
+   * [4. R](#4-r)
+      * [4.1 General](#41-general)
+      * [4.2 RStudio](#42-rstudio)
+      * [4.3 Packages](#43-packages)
+         * [4.3.1 Task view "Spatial"](#431-task-view-spatial)
+         * [4.3.2 Task view "Machine Learning"](#432-task-view-machine-learning)
+   * [5. Accessing remote servers](#5-accessing-remote-servers)
+   * [6. Desktop related](#6-desktop-related)
+      * [KDE](#kde)
+   * [7. Battery life optimization](#7-battery-life-optimization)
+   * [8. Additional stuff](#8-additional-stuff)
+      * [8.1 arara](#81-arara)
+      * [8.2 latexindent.pl: Required perl modules](#82-latexindentpl-required-perl-modules)
+      * [8.3 Editor schemes](#83-editor-schemes)
+
+<!-- Added by: pjs, at: 2018-03-10T00:41+01:00 -->
+
+<!--te-->
 
 I recommend using [Antergos | Your Linux. Always Fresh. Never Frozen.](https://antergos.com). 
 Officially its a distribution but most people refer to it as a graphical installer for Arch Linux.
@@ -35,7 +62,7 @@ Here is a list ([AUR helpers - ArchWiki](https://wiki.archlinux.org/index.php/AU
 
 Install `trizen`: 
 
-```
+```bash
 git clone https://aur.archlinux.org/trizen-git.git
 cd trizen-git
 makepkg -si
@@ -51,13 +78,10 @@ In `~/.config/trizen/trizen.conf` set "noedit" to "1" to not being prompted to e
 
 The `zsh` (Z shell) is an alternative to the default installed `bash`(Bourne-again Shell). It has several advantages (file globbing, visual appearance, etc.).
 
-To set it up, do the following (see [GitHub - sorin-ionescu/prezto: The configuration framework for Zsh](https://github.com/sorin-ionescu/prezto):
+To set it up, do the following (see [GitHub - sorin-ionescu/prezto: The configuration framework for Zsh](https://github.com/sorin-ionescu/prezto).
+First, install the "Z-shell": `trizen zsh` and use it: `zsh`.
 
 ```bash
-trizen zsh
-
-zsh
-
 git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 
 setopt EXTENDED_GLOB
@@ -65,20 +89,24 @@ for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
   ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
 done
 
-sudo chsh -s /bin/zsh
+chsh -s /bin/zsh
 ```
 
 Logout/login.
 
 Afterwards set up some custom wrapper functions (`aliases`) around `trizen` to simplify usage:
 
-In your `~/.zshrc`, append the following line: 
+In `~/.zshrc`, append the following line: 
 
 ```
 source "${ZDOTDIR:-$HOME}/.zprezto/pac.zsh"
 ```
 
-Next, create the following file `.zprezto/pac.zsh`:
+Next, create the following script `.zprezto/pac.zsh`.
+KDE: `kate .zprezto/pac.zsh`
+GNOME: `sudo gedit .zprezto/pac.zsh`
+
+(Using `kate` (KDE) or `gedit` (GNOME) you can also solve all following "file opening/creation" tasks.)
 
 ```zsh
 pac () {
@@ -122,9 +150,9 @@ To speed up the process by enabling parallel compiling, set the `MAKEVARS` varia
 
 This will use all available cores on your machine for compiling.
 
-## 3. System related
+# 3. System related
 
-### 3.1 Install system libraries
+## 3.1 Install system libraries
 
 For the following install calls, you can either use `trizen` or (if you added the `zsh` wrapper functions above) `pac`.
 While calling `trizen <package>` will first do a search in AUR and then install the package, the complementary function for this would be `pac search <package>`. Calling `pac install` will directly install the given package.
@@ -149,7 +177,7 @@ Other important system libraries:
 * `pac install pandoc-bin pandoc-citeproc-bin12` (for all kind of Rmarkdown stuff. Make sure to install this library as the one in the community repository comes with 1 GB Haskell dependencies!)
 * `pac install hugo` (if you are a blogger using the R package `blogdown`)
 
-### 3.2 Apps
+## 3.2 Apps
 
 Apps are (of course) completely opinionated.
 Feel free to try out my favorite ones or stick with your favorites :smile: 
@@ -179,12 +207,12 @@ Image viewer: `pac install xnviewmp`
 Virtualbox: [VirtualBox – wiki.archlinux.de](https://wiki.archlinux.de/title/VirtualBox)  
 Terminal: `pac install tilix`  
 Browser: `pac install vivaldi-snapshot`  
-Dock: `pac install latte-dock` (optional if you prefer a dock over the default taskbar if you have chosen KDE as desktop environment)   
+Dock: `pac install latte-dock` ([KDE only] If you prefer a dock layout over the default layout)   
 Twitter client: `pac install corebird`   
 
-## 4. R 
+# 4. R 
 
-### 4.1 General
+## 4.1 General
 
 For fast package (re-)installation using `ccache`, put the following into `~/.R/Makevars`:
 
@@ -207,7 +235,7 @@ F77=$(CCACHE) gfortran$(VER)
 Additionally, install `ccache` on your system: `pac install ccache`.
 See [this blog post](http://dirk.eddelbuettel.com/blog/2017/11/27/#011_faster_package_installation_one) by Dirk Eddelbuettel as a reference.
 
-### 4.2 RStudio
+## 4.2 RStudio
 
 Use `pac search rstudio` and pick your favorite release channel.
 
@@ -237,7 +265,7 @@ Required system libraries:
 
 * `pac install nlopt`
 
-## 5. Mounting servers
+# 5. Accessing remote servers
 
 There are multiple ways to do so ([Auto-mount network shares (cifs, sshfs, nfs) on-demand using autofs | Patrick Schratz](https://pat-s.github.io/post/autofs/), [fstab - ArchWiki](https://wiki.archlinux.org/index.php/fstab)).
 
@@ -261,14 +289,14 @@ sshfs#<username>@<ip>:<remote mount point> <local mount point> fuse        recon
 
 Reboot.
 
-## 6. Desktop related
+# 6. Desktop related
 
-### KDE
+## KDE
 
 If you want to use an automatic login to a VPN and the networkmanager-daemon (e.g. Openconnect) does not store your password, try the `network-manager-applet` package. 
 It is the GNOME network-manager and has for some reason no problems with storing the password.
 
-## 7. Battery life optimization
+# 7. Battery life optimization
 
 Although the Linux kernel has a lot of power saving options, they are not all enabled by default.
 
@@ -287,14 +315,14 @@ Then follow the instructions on [TLP - ArchWiki](https://wiki.archlinux.org/inde
 `powertop`though is useful to check the applied settings. Do `sudo powertop` and go to the "tunables" section and check if most settings are "GOOD" (most are "BAD" before applying `tlp`).
 
 
-## 8. Other stuff
+# 8. Additional stuff
 
-### 8.1 arara
+## 8.1 arara
 
 [GitHub - cereda/arara: arara is a TeX automation tool based on rules and directives. It gives you subsidies to enhance your TeX experience.](https://github.com/cereda/arara)
 An automatization tool for TeX: `pac install arara-git`.late
 
-### 8.2 latexindent.pl: Required perl modules
+## 8.2 latexindent.pl: Required perl modules
 
 `latexindent` is a library which automatically indents your LaTeX document during compilation: [GitHub - cmhughes/latexindent.pl: Perl script to add indentation (leading horizontal space) to LaTeX files; as of V3.0, the script can also modify line breaks. The script is customisable through its YAML interface.](https://github.com/cmhughes/latexindent.pl)
 
@@ -303,7 +331,7 @@ An automatization tool for TeX: `pac install arara-git`.late
 `pac install perl-file-homedir`
 `pac install perl-unicode-linebreak`
 
-### 8.3 Editor schemes
+## 8.3 Editor schemes
 
 I use the [Dracula](https://draculatheme.com) scheme in almost all applications.
 While its comes integrated into RStudio, here are installation instructions for [Kate](https://draculatheme.com/kate/) and [Tilix](https://github.com/krzysztofzuraw/dracula-tilix).

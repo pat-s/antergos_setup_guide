@@ -1,0 +1,3 @@
+# automatically create TOC
+
+./gh-md-toc --insert ~/git/antergos_setup_guide/README.md
