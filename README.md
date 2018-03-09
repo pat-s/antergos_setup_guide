@@ -1,15 +1,16 @@
+# Last update: March 2018
+
 This guide does not claim to be complete and only reflects my personal view on how to setup a working Arch Linux system tailored to data science, R and LaTeX usage. 
 I you have suggestions for modifications, please open an issue.
 
-
-# Arch Linux setup guide
+# Antergos/Arch Linux setup guide
 
 I recommend using [Antergos | Your Linux. Always Fresh. Never Frozen.](https://antergos.com). 
 Officially its a distribution but most people refer to it as a graphical installer for Arch Linux.
 It comes with the choice of 6 different desktop systems.
 Choose a desktop that suites you. Choose wisely. Your desktop is responsible for the look, feel and standard applications of your installation. 
 See [10 Best Linux Desktop Environments And Their Comparison | 2018 Edition](https://fossbytes.com/best-linux-desktop-environments/) for some inspiration.
-What makes Antergos a distribution is that it also comes with its own libraries maintained by the Antergos developers that you can install.
+What makes Antergos a distribution rather than an "installer only" is the fact that it also comes with its own libraries maintained by the Antergos developers.
 
 Create a installer by following [Create a working Live USB | Antergos Wiki](https://antergos.com/wiki/uncategorized/create-a-working-live-usb/).
 
@@ -20,7 +21,7 @@ Make sure to check out [Frequently asked questions - ArchWiki](https://wiki.arch
 There are many concepts on how to partition a Linux system correctly. The following reflects my current view:
 
 1. Select "Manual" partitioning when being prompted
-2. Create a SWAP partition that is >= your amount of RAM (e.g. for 16 GB RAM use 16.5 GB partition size). Format: Linux Swap
+2. Create a SWAP partition that is >= your amount of RAM (e.g. for 16 GB RAM use 16.5 GB partition size). Format: `Linux Swap`
 3. Create a 1 GB partition. Mount point: `/boot`. Format: `ext4`
 2. Create a 50 GB partition for "root". Mount point: `/`. Format: `ext4`
 3. With the remaining space create "home". Mount point: `/home`. Format: `ext4`
@@ -40,7 +41,7 @@ cd trizen-git
 makepkg -si
 ```
 
-(We need the git version as it has a fix for the wrapper functions below that is not yet included in the latest release when writing this guide.)
+(We need the git version as it includes a fix for the wrapper functions below that is not yet included in the latest release when writing this guide.)
 
 In `~/.config/trizen/trizen.conf` set "noedit" to "1" to not being prompted to edit source code on every install.
 
@@ -50,9 +51,9 @@ In `~/.config/trizen/trizen.conf` set "noedit" to "1" to not being prompted to e
 
 The `zsh` (Z shell) is an alternative to the default installed `bash`(Bourne-again Shell). It has several advantages (file globbing, visual appearance, etc.).
 
-To set it up, do the following (see [GitHub - sorin-ionescu/prezto: The confi)guration framework for Zsh](https://github.com/sorin-ionescu/prezto):
+To set it up, do the following (see [GitHub - sorin-ionescu/prezto: The configuration framework for Zsh](https://github.com/sorin-ionescu/prezto):
 
-```
+```bash
 trizen zsh
 
 zsh
@@ -64,8 +65,10 @@ for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
   ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
 done
 
-chsh -s /bin/zsh
+sudo chsh -s /bin/zsh
 ```
+
+Logout/login.
 
 Afterwards set up some custom wrapper functions (`aliases`) around `trizen` to simplify usage:
 
@@ -75,9 +78,9 @@ In your `~/.zshrc`, append the following line:
 source "${ZDOTDIR:-$HOME}/.zprezto/pac.zsh"
 ```
 
-Next, create the following file `.zprezto/aur.zsh`:
+Next, create the following file `.zprezto/pac.zsh`:
 
-```
+```zsh
 pac () {
   case $* in
     install* ) shift 1; cd ~ && trizen -S "$@" --movepkg-dir=pkgs;;
@@ -92,23 +95,22 @@ pac () {
 ```
 
 Open a new terminal window and the function `pac` should be available now.
-You can now do call `pac` with all arguments listed above (`install`, `search`, etc.). 
-Check [GitHub - trizen/trizen: Lightweight AUR Package Manager](https://github.com/trizen/trizen#usage) for an explanation of the created functions.
+You can now call `pac` with all arguments listed above (`install`, `search`, etc.). 
+Check [GitHub - trizen/trizen: Lightweight AUR Package Manager](https://github.com/trizen/trizen#usage) for an explanation of the created aliases.
 
-Some explanations:
-
-* `pac install <pkg>`: Will install the specified package (if it exists) and moves it into `~/pkgs`.
-* `pac search <pkg>`: Executes a search with the specified `<pkg>` returning all matches. You can then type a number of the package you want to install. It will be moved to `~/pkgs`.
-* `pac update`: Updates all installed packages (from both Arch repos and AUR). Shows packages which are marked as `out-of-date` by the community.
-* `pac update-git`: Updates all packages installed from `git`. Note: These are usually build from source and some may take some time to install. Don't do that daily.
+* `pac install <pkg>`: Install the specified package (if it exists) and move it into `~/pkgs`.
+* `pac search <pkg>`: Executes a search with the specified `<pkg>` returning all matches. You can then type a number of the package you want to install. Package will be moved to `~/pkgs`.
+* `pac update`: Update all installed packages (from both Arch repos and AUR). Shows packages which are marked as "out-of-date" by the community.
+* `pac update-git`: Updates all packages installed from `git`. Note: These are usually build from source and certain packages may take some time to install. Don't do that daily.
 
 **Note:** Git packages will never update automatically as they are just a snapshot build of the (at the time of installation) most recent state of the respective repository. 
 So think twice if you need a git package as it is in your responsibility to update it. 
 I usually have `rstudio-desktop-git` installed to have the latest features of RStudio as the release cycles for the stable version are quite long.
 
-One argument of the wrapper functions to explain explicitly is `--movepkg`. 
-It will move all built packages `<package.tar.xz>` into `~/pkgs`.
-This has the advantage that you do not need to rebuild a package that took a long time to install if you want to re-install it - just do a `pacman -U ~/pkgs/<package.tar.xz>`.
+One important argument of the wrapper functions that should be explained in more detail is `--movepkg-dir`. 
+It will move all built packages (`<package.tar.xz>`) into `~/pkgs`.
+This has the advantage that you do not need to rebuild a package that took a long time to install if you want to re-install it - just do a `pacman -U ~/pkgs/<package.tar.xz>`. 
+See [section 3.2](https://github.com/pat-s/antergos_setup_guide#32-apps) for a handy use case.
 
 
 ## 2.2 Enable parallel compiling
@@ -134,33 +136,35 @@ Always install them via your package manager, e.g. for `numpy`: `trizen python-n
 Python Modules for QGIS:
 
 ```
-pac install python-gdal python-gdal python-yaml python-yaml python-jinja
-python-psycopg2 python-owslib python-numpy python-pygments
+pac install python-gdal python-gdal python-yaml python-yaml python-jinja python-psycopg2 python-owslib python-numpy python-pygments
 ```
 
 Other important system libraries: 
 
-* `pac install gdal2`
+* `pac install gdal`
 * `pac install udunits`
 * `pac install postgis`
 * `pac install jdk8-openjdk openjdk8-src`(jdk9 still has problems with some R packages)
-* `pac search texlive` (install 1-19)
+* `pac install texlive-most` (this is a wrapper installation that installs the most important tex libraries. Similar to `texlive-full`.)
+* `pac install pandoc-bin pandoc-citeproc-bin12` (for all kind of Rmarkdown stuff. Make sure to install this library as the one in the community repository comes with 1 GB Haskell dependencies!)
+* `pac install hugo` (if you are a blogger using the R package `blogdown`)
 
 ### 3.2 Apps
 
 Apps are (of course) completely opinionated.
 Feel free to try out my favorite ones or stick with your favorites :smile: 
 
-Messaging: `pac install franz`
-Mail: `pac install mailspring`
-Notes: `pac install boostnote`
-Reference Manager: `pac install Jabref`
-Google Drive: `pac install insync`
-Dropbox: `pac install dropbox-nautilus`
-GIS: `pac install qgis` (careful, takes > 30min - 1h to compile)
+Messaging: `pac install franz`  
+Mail: `pac install mailspring`  
+Notes: `pac install boostnote`  
+Reference Manager: `pac install Jabref`  
+Google Drive: `pac install insync`  
+Dropbox: `pac install dropbox-nautilus`  
+GIS: `pac install qgis` (careful, takes > 30min - 1h to compile)  
 
-Tip: You can install both `QGIS2` and `QGIS3` and switch between them. 
-For this you need to build both once with the wrapper functions from section 2.
+**Tip:** You can install both `QGIS2` and `QGIS3` and switch between them. 
+To do so you need to build both once with `--movepkg` option from `trizen`.
+Luckily, we defined this option within the [aliases](https://github.com/pat-s/antergos_setup_guide#21-optional-set-up-and-configure-zsh) for `trizen`.
 Afterwards, you can switch between them using `pacman -U <package_source>`. 
 E.g. to install `QGIS2` after you installed `QGIS3` :
 
@@ -168,21 +172,21 @@ E.g. to install `QGIS2` after you installed `QGIS3` :
 pacman -U ~/pkgs/qgis-ltr-2.18.17-1-x86_64.pkg.tar
 ```
 
-SAGA: `pac install saga-gis`
-Skype: `pac install skypeforlinux-preview-bin`
-Screenshot tool: `pac install shutter`
-Image viewer: `pac install xnviewmp`
-Virtualbox: [VirtualBox – wiki.archlinux.de](https://wiki.archlinux.de/title/VirtualBox)
-Terminal: `pac install tilix`
-Browser: `pac install vivaldi-snapshot`
-Dock: `pac install latte-dock` (optional if you prefer a dock over the default taskbar)
-Twitter client: `pac install corebird` 
+SAGA: `pac install saga-gis`  
+Skype: `pac install skypeforlinux-preview-bin`  
+Screenshot tool: `pac install shutter`  
+Image viewer: `pac install xnviewmp`  
+Virtualbox: [VirtualBox – wiki.archlinux.de](https://wiki.archlinux.de/title/VirtualBox)  
+Terminal: `pac install tilix`  
+Browser: `pac install vivaldi-snapshot`  
+Dock: `pac install latte-dock` (optional if you prefer a dock over the default taskbar if you have chosen KDE as desktop environment)   
+Twitter client: `pac install corebird`   
 
 ## 4. R 
 
 ### 4.1 General
 
-For fast package installation using `ccache`, put the following into `~/.R/Makevars`:
+For fast package (re-)installation using `ccache`, put the following into `~/.R/Makevars`:
 
 ```r
 CXXFLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function
@@ -200,7 +204,7 @@ FC=$(CCACHE) gfortran$(VER)
 F77=$(CCACHE) gfortran$(VER)
 ```
 
-Additionally, install `ccache` on your system: `trizen ccache`.
+Additionally, install `ccache` on your system: `pac install ccache`.
 See [this blog post](http://dirk.eddelbuettel.com/blog/2017/11/27/#011_faster_package_installation_one) by Dirk Eddelbuettel as a reference.
 
 ### 4.2 RStudio
@@ -209,7 +213,7 @@ Use `pac search rstudio` and pick your favorite release channel.
 
 ## 4.3 Packages
 
-Install `usethis` and then call `usethis::browse_github_pat()`.
+Open RStudio and install the R package `usethis` (it will install quite a few dependencies, get a coffee :D) and then call `usethis::browse_github_pat()`.
 Follow the instructions to set up a valid `GITHUB_PAT` environment variable that will be used for installing packages from Github.
 
 ### 4.3.1 Task view "Spatial"
@@ -217,11 +221,15 @@ Follow the instructions to set up a valid `GITHUB_PAT` environment variable that
 Required system libraries: 
 
 * jq (`pac install jq`)
-* udunits (`pac install udunits`)
 * fortran (`pac install gcc-fortran`)
 * v8-3.14 (`pac install v8-3.14`)
+* tk (`pac install tk`)
+* nlopt (`pac install nlopt`)
 
-Some packages (V8, geojsonlite, etc.) require the `V8` [package](https://github.com/jeroen/V8) which depends on the oudated `v8-314` library. 
+Some R packages (`geojsonlite`, etc.) require the `V8` [package](https://github.com/jeroen/V8) which depends on the outdated `v8-314` library. 
+
+Now you can install the `ctv` package and then do `ctv::install.views("Spatial").
+This will install all packages listed in the [spatial](https://cran.r-project.org/web/views/Spatial.html) task view.
 
 ### 4.3.2 Task view "Machine Learning"
 
@@ -281,12 +289,12 @@ Then follow the instructions on [TLP - ArchWiki](https://wiki.archlinux.org/inde
 
 ## 8. Other stuff
 
-### arara
+### 8.1 arara
 
 [GitHub - cereda/arara: arara is a TeX automation tool based on rules and directives. It gives you subsidies to enhance your TeX experience.](https://github.com/cereda/arara)
 An automatization tool for TeX: `pac install arara-git`.late
 
-### Perl modules needed for latexindent.pl
+### 8.2 latexindent.pl: Required perl modules
 
 `latexindent` is a library which automatically indents your LaTeX document during compilation: [GitHub - cmhughes/latexindent.pl: Perl script to add indentation (leading horizontal space) to LaTeX files; as of V3.0, the script can also modify line breaks. The script is customisable through its YAML interface.](https://github.com/cmhughes/latexindent.pl)
 
@@ -294,3 +302,8 @@ An automatization tool for TeX: `pac install arara-git`.late
 `aur install perl-dbix-log4perl`
 `pac install perl-file-homedir`
 `pac install perl-unicode-linebreak`
+
+### 8.3 Editor schemes
+
+I use the [Dracula](https://draculatheme.com) scheme in almost all applications.
+While its comes integrated into RStudio, here are installation instructions for [Kate](https://draculatheme.com/kate/) and [Tilix](https://github.com/krzysztofzuraw/dracula-tilix).
