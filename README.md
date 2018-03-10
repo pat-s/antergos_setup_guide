@@ -1,7 +1,8 @@
 **Last update: March 2018**
 
-This guide does not claim to be complete and only reflects my personal view on how to setup a working Arch Linux system tailored to data science, R and LaTeX usage. 
-I you have suggestions for modifications, please open an issue.
+This guide does not claim to be complete and only reflects my personal view on how to setup a working Arch Linux system tailored to data science, R and spatial analysis use. 
+If you have suggestions for modifications, please open an issue :duck:. 
+Enjoy Linux! :kissing_smiling_eyes:
 
 ### Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis
 
