@@ -3,11 +3,13 @@
 This guide does not claim to be complete and only reflects my personal view on how to setup a working Arch Linux system tailored to data science, R and LaTeX usage. 
 I you have suggestions for modifications, please open an issue.
 
-## Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis
+### Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis
 
 <p align="center"> 
 <img src="figs/antergos.jpeg">
 </p>
+
+# Table of Contents
 
 <!--ts-->
    * [1. Setting up the partitions](#1-setting-up-the-partitions)
@@ -38,7 +40,7 @@ I you have suggestions for modifications, please open an issue.
 
 I recommend using [Antergos | Your Linux. Always Fresh. Never Frozen.](https://antergos.com). 
 Officially its a distribution but most people refer to it as a graphical installer for Arch Linux.
-It comes with the choice of 6 different desktop systems.
+It comes with the choice of 6 different desktop environments.
 Choose a desktop that suites you. Choose wisely. Your desktop is responsible for the look, feel and standard applications of your installation. 
 See [10 Best Linux Desktop Environments And Their Comparison | 2018 Edition](https://fossbytes.com/best-linux-desktop-environments/) for some inspiration.
 What makes Antergos a distribution rather than an "installer only" is the fact that it also comes with its own libraries maintained by the Antergos developers.
