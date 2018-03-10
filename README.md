@@ -1,6 +1,7 @@
-**Last update: March 2018**
+**Last update: March 10 2018**
 
-This guide does not claim to be complete and only reflects my personal view on how to setup a working Arch Linux system tailored to data science, R and spatial analysis use. 
+This guide does not claim to be complete.
+It reflects my view on how to setup a working Arch Linux system tailored towards data science, R and spatial analysis. 
 If you have suggestions for modifications, please open an issue :duck:. 
 Enjoy Linux! :kissing_smiling_eyes:
 
@@ -13,9 +14,11 @@ Enjoy Linux! :kissing_smiling_eyes:
 # Table of Contents
 
 <!--ts-->
-   * [1. Setting up the partitions](#1-setting-up-the-partitions)
+   * [1. Installation](#1-installation)
+      * [1.1 Install options](#11-install-options)
+      * [1.2 Setting up the partitions](#12-setting-up-the-partitions)
    * [2. Installing the package manager](#2-installing-the-package-manager)
-      * [2.1 (Optional) Set up and configure zsh](#21-optional-set-up-and-configure-zsh)
+      * [2.1 (Optional) Install and configure zsh](#21-optional-install-and-configure-zsh)
       * [2.2 Enabling parallel compiling](#22-enabling-parallel-compiling)
    * [3. System related](#3-system-related)
       * [3.1 Installing system libraries](#31-installing-system-libraries)
@@ -27,6 +30,8 @@ Enjoy Linux! :kissing_smiling_eyes:
          * [4.3.1 Task view "Spatial"](#431-task-view-spatial)
          * [4.3.2 Task view "Machine Learning"](#432-task-view-machine-learning)
    * [5. Accessing remote servers](#5-accessing-remote-servers)
+      * [5.1 File access (file manager)](#51-file-access-file-manager)
+      * [5.2 Command-line access (Terminal)](#52-command-line-access-terminal)
    * [6. Desktop related](#6-desktop-related)
       * [KDE](#kde)
    * [7. Laptop battery life optimization](#7-laptop-battery-life-optimization)
@@ -35,37 +40,58 @@ Enjoy Linux! :kissing_smiling_eyes:
       * [8.2 latexindent.pl: Required perl modules](#82-latexindentpl-required-perl-modules)
       * [8.3 Editor schemes](#83-editor-schemes)
 
-<!-- Added by: pjs, at: 2018-03-10T00:55+01:00 -->
+<!-- Added by: pjs, at: 2018-03-10T13:02+01:00 -->
 
 <!--te-->
 
-I recommend using [Antergos | Your Linux. Always Fresh. Never Frozen.](https://antergos.com). 
+I recommend using [Antergos](https://antergos.com). 
 Officially its a distribution but most people refer to it as a graphical installer for Arch Linux.
 It comes with the choice of 6 different desktop environments.
-Choose a desktop that suites you. Choose wisely. Your desktop is responsible for the look, feel and standard applications of your installation. 
-See [10 Best Linux Desktop Environments And Their Comparison | 2018 Edition](https://fossbytes.com/best-linux-desktop-environments/) for some inspiration.
+Choose a desktop that suites you. 
+The desktop environment is responsible for the look, feel and standard applications of your installation. 
+See [this comparison](https://fossbytes.com/best-linux-desktop-environments/) for some inspiration.
+
+But don't worry: You can seamlessly switch between the desktop at the login screen of Antergos. 
+This way you can try out all options and choose the one that suites you most (my favorite is KDE).
 What makes Antergos a distribution rather than an "installer only" is the fact that it also comes with its own libraries maintained by the Antergos developers.
 
-Create a installer by following [Create a working Live USB | Antergos Wiki](https://antergos.com/wiki/uncategorized/create-a-working-live-usb/).
+First, create a installer by following [this guide](https://antergos.com/wiki/uncategorized/create-a-working-live-usb/).
+If you want to set up a dual boot, [guide](https://antergos.com/wiki/de/install/how-to-dual-boot-antergos-windows-uefi-expanded-by-linuxhat) is a good resource.
 
-Make sure to check out [Frequently asked questions - ArchWiki](https://wiki.archlinux.org/index.php/Frequently_asked_questions) and [Arch compared to other distributions - ArchWiki](https://wiki.archlinux.org/index.php/Arch_compared_to_other_distributions) to get a better understanding of Arch. 
+Make sure to check out [the ArchWiki FAQs](https://wiki.archlinux.org/index.php/Frequently_asked_questions) and [Arch compared to other distributions - ArchWiki](https://wiki.archlinux.org/index.php/Arch_compared_to_other_distributions) to get a better understanding of Arch. 
 
-# 1. Setting up the partitions
+# 1. Installation
 
-There are many concepts on how to partition a Linux system correctly. The following reflects my current view:
+## 1.1 Install options
+
+During installation you have several options to choose from.
+
+Some are up to personal liking (e.g. Browser choice), others are important for a solid system:
+
+- [x] SSH
+- [x] NVIDIA drivers (if you have a NVIDIA graphics card)
+- [x] AUR support
+- [x] CUPS (printer support)
+- [x] Bluetooth support
+
+Whether you want to use the LTS Linux kernel or the most recent one is up to you. 
+I never faced any problems with the most recent one but the LTS one is theoretically the safer option.
+
+## 1.2 Setting up the partitions
+
+Several valid concepts exists on how to partition a Linux system. 
+The following reflects my current view:
 
 1. Select "Manual" partitioning when being prompted
 2. Create a SWAP partition that is >= your amount of RAM (e.g. for 16 GB RAM use 16.5 GB partition size). Format: `Linux Swap`
 3. Create a 1 GB partition. Mount point: `/boot`. Format: `ext4`
-2. Create a 50 GB partition for "root". Mount point: `/`. Format: `ext4`
-3. With the remaining space create "home". Mount point: `/home`. Format: `ext4`
-
+4. Create a 50 GB partition for "root". Mount point: `/`. Format: `ext4`
+5. With the remaining space create "home". Mount point: `/home`. Format: `ext4`
 
 # 2. Installing the package manager
 
 I prefer `trizen`. 
-Here is a list ([AUR helpers - ArchWiki](https://wiki.archlinux.org/index.php/AUR_helpers)) comparing more alternatives. 
-(Scroll to the bottom.)
+Here is a list ([AUR helpers - ArchWiki](https://wiki.archlinux.org/index.php/AUR_helpers)) comparing more alternatives (scroll to the bottom).
 
 Install `trizen`: 
 
@@ -79,9 +105,9 @@ makepkg -si
 
 In `~/.config/trizen/trizen.conf` set "noedit" to "1" to not being prompted to edit source code on every install.
 
-(Optional) [GitHub - gavinlyonsrepo/cylon: Updates, maintenance, backups and system checks in a TUI menu driven bash shell script for an Arch based Linux distro](https://github.com/gavinlyonsrepo/cylon) -> Wrapper around `trizen`.
+(Optional) Install [cyclon](https://github.com/gavinlyonsrepo/cylon) -> Wrapper around `trizen` and other tasks (system maintenance, etc.) .
 
-## 2.1 (Optional) Set up and configure `zsh`
+## 2.1 (Optional) Install and configure `zsh`
 
 The `zsh` (Z-shell) is an alternative to the default installed `bash`(Bourne-again Shell). 
 It has several advantages (file globbing, visual appearance, etc.).
@@ -170,11 +196,11 @@ This will use all available cores on your machine for compiling.
 For the following install calls, you can either use `trizen` or (if you added the `zsh` wrapper functions above) `pac`.
 While calling `trizen <package>` will first do a search in AUR and then install the package, the complementary function for this would be `pac search <package>`. Calling `pac install` will directly install the given package.
 
-**Never install python libraries via `pip` as otherwise there will be conflicts with AUR packages depending on certain libraries!**
+**Never install python libraries via `pip`! All AUR packages try to install required python packages from AUR and if these have been installed via `pip` you will face conflicts.**
 
-Always install them via your package manager, e.g. for `numpy`: `trizen python-numpy`
+Always install them via your package manager, e.g. for `numpy`: `pac install python-numpy`
 
-Python Modules for QGIS:
+Python Modules for QGIS: QGIS needs some external python libraries to not throw errors on startup:
 
 ```
 pac install python-gdal python-gdal python-yaml python-yaml python-jinja python-psycopg2 python-owslib python-numpy python-pygments
@@ -186,14 +212,13 @@ Other important system libraries:
 * `pac install udunits`
 * `pac install postgis`
 * `pac install jdk8-openjdk openjdk8-src`(jdk9 still has problems with some R packages)
-* `pac install texlive-most` (this is a wrapper installation that installs the most important tex libraries. Similar to `texlive-full`.)
+* `pac install texlive-most` (this is a wrapper installation that installs the most important tex libraries. Similar to `texlive-full` on other Linux distributions.)
 * `pac install pandoc-bin pandoc-citeproc-bin12` (for all kind of Rmarkdown stuff. Make sure to install this library as the one in the community repository comes with 1 GB Haskell dependencies!)
 * `pac install hugo` (if you are a blogger using the R package `blogdown`)
 
 ## 3.2 Apps
 
-Apps are (of course) completely opinionated.
-Feel free to try out my favorite ones or stick with your favorites :smile: 
+Opinionated applications :smile: 
 
 Messaging: `pac install franz`  
 Mail: `pac install mailspring`  
@@ -259,6 +284,11 @@ Follow the instructions to set up a valid `GITHUB_PAT` environment variable that
 
 ### 4.3.1 Task view "Spatial"
 
+Of course you it is not required to install all packages of a task view. 
+You will never use all packages of a task view.
+In my opinion, however, it is pretty neat to have one command that install (almost) all packages I use of a certain field.
+I do not care about the additional packages installed.
+
 Required system libraries: 
 
 * jq (`pac install jq`)
@@ -266,11 +296,20 @@ Required system libraries:
 * v8-3.14 (`pac install v8-3.14`)
 * tk (`pac install tk`)
 * nlopt (`pac install nlopt`)
+* gsl (`pac install gsl`)
 
 Some R packages (`geojsonlite`, etc.) require the `V8` [package](https://github.com/jeroen/V8) which depends on the outdated `v8-314` library. 
 
+For `rJava` we need to do `sudo R CMD javareconf`.
+
 Now you can install the `ctv` package and then do `ctv::install.views("Spatial").
 This will install all packages listed in the [spatial](https://cran.r-project.org/web/views/Spatial.html) task view.
+
+Packages that error during installation (Please report back if you have a working solution):
+
+* ProbitSpatial
+* spaMM
+* RPyGeo (Windows only)
 
 ### 4.3.2 Task view "Machine Learning"
 
@@ -278,7 +317,14 @@ Required system libraries:
 
 * `pac install nlopt`
 
+Packages that error during installation (Please report back if you have a working solution):
+
+* interval (requires Icens from Bioconductor)
+* LTRCtrees (requires Icens from Bioconductor)
+
 # 5. Accessing remote servers
+
+## 5.1 File access (file manager)
 
 There are multiple ways to do so ([Auto-mount network shares (cifs, sshfs, nfs) on-demand using autofs | Patrick Schratz](https://pat-s.github.io/post/autofs/), [fstab - ArchWiki](https://wiki.archlinux.org/index.php/fstab)).
 
@@ -298,9 +344,49 @@ sshfs#<username>@<ip>:<remote mount point> <local mount point> fuse        recon
 * (cifs) Depending how new the Windows server is, you do not need `vers=1.0`.
 * (cifs) Store your login credentials for the windows server in a file, e.g. `/etc/.smbcredentials.txt` with contents being `username = <username>` and `password = <password>`.
 * (sshfs) Copy `.ssh/id_rsa` to `root/.ssh/` as the mount will be executed by the root user.
-* (cifs) Install the Arch Linux kernel headers for the `cifs` package to work (and later on for Virtualbox): `trizen linux-headers`
+* (cifs) Install the Arch Linux kernel headers for the `cifs` package to work (and later on for Virtualbox): `pac install linux-headers`
 
 Reboot.
+
+## 5.2 Command-line access (Terminal)
+
+You can easily connect to all servers you have access to with a little one-time effort.
+
+Terminal applications are capable of storing "Profiles" that save the configuration to connect to a specific server.
+
+1. Create a profile for each server
+2. Under `<profile name> -> Command -> [x] Run a custom command instead of my shell` put your `ssh` command in, e.g. `ssh <username>@<servername>`.
+3. Open all profiles in tabs: Select the desired profile and click "New session" (the left one of the three buttons at the top). 
+
+![](figs/tilix1.png)
+
+4. Save each open profile with `save as` in a folder of your liking.
+
+![](figs/tilix2.png)
+
+5. Create a wrapper script that loads exactly this configuration:
+
+```bash
+#!/bin/bash
+
+TILIX_SESSIONS_FOLDER=<path to folder with all saved configuration files>
+
+TILIX_OPTS=""
+
+for session in $TILIX_SESSIONS_FOLDER/*; do
+  TILIX_OPTS="$TILIX_OPTS -s $session"
+done
+
+tilix $TILIX_OPTS
+```
+
+For convenience, set the execution of this script to an alias in `~/.zpreztorc`:
+
+```
+alias servers='bash ~/tilix_all.sh'
+```
+
+Now all you need to do is typing `servers` to load a terminal configuration with all your server connections.
 
 # 6. Desktop related
 
@@ -332,15 +418,15 @@ Then follow the instructions on [TLP - ArchWiki](https://wiki.archlinux.org/inde
 
 ## 8.1 arara
 
-[GitHub - cereda/arara: arara is a TeX automation tool based on rules and directives. It gives you subsidies to enhance your TeX experience.](https://github.com/cereda/arara)
-An automatization tool for TeX: `pac install arara-git`.late
+[GitHub - cereda/arara: arara is a TeX automation tool based on rules and directives.](https://github.com/cereda/arara)  
+An automatization tool for TeX: `pac install arara-git`
 
 ## 8.2 latexindent.pl: Required perl modules
 
-`latexindent` is a library which automatically indents your LaTeX document during compilation: [GitHub - cmhughes/latexindent.pl: Perl script to add indentation (leading horizontal space) to LaTeX files; as of V3.0, the script can also modify line breaks. The script is customisable through its YAML interface.](https://github.com/cmhughes/latexindent.pl)
+`latexindent` is a library which automatically indents your LaTeX document during compilation: [GitHub - cmhughes/latexindent.pl](https://github.com/cmhughes/latexindent.pl)
 
-`aur install perl-log-dispatch`
-`aur install perl-dbix-log4perl`
+`pac install perl-log-dispatch`
+`pac install perl-dbix-log4perl`
 `pac install perl-file-homedir`
 `pac install perl-unicode-linebreak`
 
