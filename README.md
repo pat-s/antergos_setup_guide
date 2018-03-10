@@ -3,7 +3,11 @@
 This guide does not claim to be complete and only reflects my personal view on how to setup a working Arch Linux system tailored to data science, R and LaTeX usage. 
 I you have suggestions for modifications, please open an issue.
 
-# Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis
+## Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis
+
+<p align="center"> 
+<img src="figs/antergos.jpeg">
+</p>
 
 <!--ts-->
    * [1. Setting up the partitions](#1-setting-up-the-partitions)
