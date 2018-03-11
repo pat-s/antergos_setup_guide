@@ -1,15 +1,16 @@
 **Last update: March 10 2018**
 
 This guide does not claim to be complete.
-It reflects my view on how to setup a working Arch Linux system tailored towards data science, R and spatial analysis. 
-If you have suggestions for modifications, please open an issue :duck:. 
+It reflects my view on how to setup a working Arch Linux system tailored towards data science, R and spatial analysis.
+If you have suggestions for modifications, please open an issue :duck:.
 Enjoy Linux! :kissing_smiling_eyes:
 
 ### Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis
 
-<p align="center"> 
+<p align="center">
 <img src="figs/antergos.jpeg">
 </p>
+
 
 # Table of Contents
 
@@ -44,21 +45,21 @@ Enjoy Linux! :kissing_smiling_eyes:
 
 <!--te-->
 
-I recommend using [Antergos](https://antergos.com). 
+I recommend using [Antergos](https://antergos.com).
 Officially its a distribution but most people refer to it as a graphical installer for Arch Linux.
 It comes with the choice of 6 different desktop environments.
-Choose a desktop that suites you. 
-The desktop environment is responsible for the look, feel and standard applications of your installation. 
+Choose a desktop that suites you.
+The desktop environment is responsible for the look, feel and standard applications of your installation.
 See [this comparison](https://fossbytes.com/best-linux-desktop-environments/) for some inspiration.
 
-But don't worry: You can seamlessly switch between the desktop at the login screen of Antergos. 
+But don't worry: You can seamlessly switch between the desktop at the login screen of Antergos.
 This way you can try out all options and choose the one that suites you most (my favorite is KDE).
 What makes Antergos a distribution rather than an "installer only" is the fact that it also comes with its own libraries maintained by the Antergos developers.
 
 First, create a installer by following [this guide](https://antergos.com/wiki/uncategorized/create-a-working-live-usb/).
 If you want to set up a dual boot, [guide](https://antergos.com/wiki/de/install/how-to-dual-boot-antergos-windows-uefi-expanded-by-linuxhat) is a good resource.
 
-Make sure to check out [the ArchWiki FAQs](https://wiki.archlinux.org/index.php/Frequently_asked_questions) and [Arch compared to other distributions - ArchWiki](https://wiki.archlinux.org/index.php/Arch_compared_to_other_distributions) to get a better understanding of Arch. 
+Make sure to check out [the ArchWiki FAQs](https://wiki.archlinux.org/index.php/Frequently_asked_questions) and [Arch compared to other distributions - ArchWiki](https://wiki.archlinux.org/index.php/Arch_compared_to_other_distributions) to get a better understanding of Arch.
 
 # 1. Installation
 
@@ -74,12 +75,12 @@ Some are up to personal liking (e.g. Browser choice), others are important for a
 - [x] CUPS (printer support)
 - [x] Bluetooth support
 
-Whether you want to use the LTS Linux kernel or the most recent one is up to you. 
+Whether you want to use the LTS Linux kernel or the most recent one is up to you.
 I never faced any problems with the most recent one but the LTS one is theoretically the safer option.
 
 ## 1.2 Setting up the partitions
 
-Several valid concepts exists on how to partition a Linux system. 
+Several valid concepts exists on how to partition a Linux system.
 The following reflects my current view:
 
 1. Select "Manual" partitioning when being prompted
@@ -90,10 +91,10 @@ The following reflects my current view:
 
 # 2. Installing the package manager
 
-I prefer `trizen`. 
+I prefer `trizen`.
 Here is a list ([AUR helpers - ArchWiki](https://wiki.archlinux.org/index.php/AUR_helpers)) comparing more alternatives (scroll to the bottom).
 
-Install `trizen`: 
+Install `trizen`:
 
 ```bash
 git clone https://aur.archlinux.org/trizen-git.git
@@ -109,7 +110,7 @@ In `~/.config/trizen/trizen.conf` set "noedit" to "1" to not being prompted to e
 
 ## 2.1 (Optional) Install and configure `zsh`
 
-The `zsh` (Z-shell) is an alternative to the default installed `bash`(Bourne-again Shell). 
+The `zsh` (Z-shell) is an alternative to the default installed `bash`(Bourne-again Shell).
 It has several advantages (file globbing, visual appearance, etc.).
 You can of course also stick with `bash`.
 However, then you need to adapt the following script to make it work with `bash` if you want to use all the defined helper functions.
@@ -130,12 +131,12 @@ chsh -s /bin/zsh
 
 Logout/login.
 
-(I prefer using the `agnoster` theme. 
+(I prefer using the `agnoster` theme.
 Simply set `theme: agnoster` in line 116 of `~/.zpreztorc`.)
 
 Afterwards set up some custom wrapper functions (`aliases`) around `trizen` to simplify usage:
 
-In `~/.zshrc`, append the following line: 
+In `~/.zshrc`, append the following line:
 
 ```
 source "${ZDOTDIR:-$HOME}/.zprezto/pac.zsh"
@@ -162,27 +163,27 @@ pac () {
 ```
 
 Open a new terminal window and the function `pac` should be available now.
-You can now call `pac` with all arguments listed above (`install`, `search`, etc.). 
+You can now call `pac` with all arguments listed above (`install`, `search`, etc.).
 Check [GitHub - trizen/trizen: Lightweight AUR Package Manager](https://github.com/trizen/trizen#usage) for an explanation of the created aliases.
 
 * `pac install <pkg>`: Install the specified package (if it exists) and move it into `~/pkgs`.
 * `pac search <pkg>`: Executes a search with the specified `<pkg>` returning all matches. You can then type a number of the package you want to install. Package will be moved to `~/pkgs`.
 * `pac update`: Update all installed packages (from both Arch repos and AUR). Shows packages which are marked as "out-of-date" by the community.
-* `pac update-git`: Updates all packages installed from `git`. 
+* `pac update-git`: Updates all packages installed from `git`.
 Note: These are usually build from source and certain packages may take some time to install. Don't do that daily.
 
-**Note:** Git packages will never update automatically as they are just a snapshot build of the (at the time of installation) most recent state of the respective repository. 
-So think twice if you need a git package as it is in your responsibility to update it. 
+**Note:** Git packages will never update automatically as they are just a snapshot build of the (at the time of installation) most recent state of the respective repository.
+So think twice if you need a git package as it is in your responsibility to update it.
 I usually have `rstudio-desktop-git` installed to have the latest features of RStudio as the release cycles for the stable version are quite long.
 
-One important argument of the wrapper functions that should be explained in more detail is `--movepkg-dir`. 
+One important argument of the wrapper functions that should be explained in more detail is `--movepkg-dir`.
 It will move all built packages (`<package.tar.xz>`) into `~/pkgs`.
-This has the advantage that you do not need to rebuild a package that took a long time to install if you want to re-install it - just do a `pacman -U ~/pkgs/<package.tar.xz>`. 
+This has the advantage that you do not need to rebuild a package that took a long time to install if you want to re-install it - just do a `pacman -U ~/pkgs/<package.tar.xz>`.
 See [section 3.2](https://github.com/pat-s/antergos_setup_guide#32-apps) for a handy use case.
 
 ## 2.2 Enabling parallel compiling
 
-Compiling packages from source can take some time. 
+Compiling packages from source can take some time.
 To speed up the process by enabling parallel compiling, set the `MAKEVARS` variable in `/etc/makepkg.conf`:
 
 `MAKEFLAGS="-j$(nproc)"`
@@ -206,7 +207,7 @@ Python Modules for QGIS: QGIS needs some external python libraries to not throw 
 pac install python-gdal python-gdal python-yaml python-yaml python-jinja python-psycopg2 python-owslib python-numpy python-pygments
 ```
 
-Other important system libraries: 
+Other important system libraries:
 
 * `pac install gdal`
 * `pac install udunits`
@@ -218,37 +219,37 @@ Other important system libraries:
 
 ## 3.2 Apps
 
-Opinionated applications :smile: 
+Opinionated applications :smile:
 
-Messaging: `pac install franz`  
-Mail: `pac install mailspring`  
-Notes: `pac install boostnote`  
-Reference Manager: `pac install Jabref`  
-Google Drive: `pac install insync`  
-Dropbox: `pac install dropbox-nautilus`  
-GIS: `pac install qgis` (careful, takes > 30min - 1h to compile)  
+Messaging: `pac install franz`
+Mail: `pac install mailspring`
+Notes: `pac install boostnote`
+Reference Manager: `pac install Jabref`
+Google Drive: `pac install insync`
+Dropbox: `pac install dropbox-nautilus`
+GIS: `pac install qgis` (careful, takes > 30min - 1h to compile)
 
-**Tip:** You can install both `QGIS2` and `QGIS3` and switch between them. 
+**Tip:** You can install both `QGIS2` and `QGIS3` and switch between them.
 To do so you need to build both once with `--movepkg` option from `trizen`.
 Luckily, we defined this option within the [aliases](https://github.com/pat-s/antergos_setup_guide#21-optional-set-up-and-configure-zsh) for `trizen`.
-Afterwards, you can switch between them using `pacman -U <package_source>`. 
+Afterwards, you can switch between them using `pacman -U <package_source>`.
 E.g. to install `QGIS2` after you installed `QGIS3` :
 
 ```
 pacman -U ~/pkgs/qgis-ltr-2.18.17-1-x86_64.pkg.tar
 ```
 
-SAGA: `pac install saga-gis`  
-Skype: `pac install skypeforlinux-preview-bin`  
-Screenshot tool: `pac install shutter`  
-Image viewer: `pac install xnviewmp`  
-Virtualbox: [VirtualBox – wiki.archlinux.de](https://wiki.archlinux.de/title/VirtualBox)  
-Terminal: `pac install tilix`  
-Browser: `pac install vivaldi-snapshot`  
-Dock: `pac install latte-dock` ([KDE only] If you prefer a dock layout over the default layout)   
-Twitter client: `pac install corebird`   
+SAGA: `pac install saga-gis`
+Skype: `pac install skypeforlinux-preview-bin`
+Screenshot tool: `pac install shutter`
+Image viewer: `pac install xnviewmp`
+Virtualbox: [VirtualBox – wiki.archlinux.de](https://wiki.archlinux.de/title/VirtualBox)
+Terminal: `pac install tilix`
+Browser: `pac install vivaldi-snapshot`
+Dock: `pac install latte-dock` ([KDE only] If you prefer a dock layout over the default layout)
+Twitter client: `pac install corebird`
 
-# 4. R 
+# 4. R
 
 ## 4.1 General
 
@@ -273,9 +274,42 @@ F77=$(CCACHE) gfortran$(VER)
 Additionally, install `ccache` on your system: `pac install ccache`.
 See [this blog post](http://dirk.eddelbuettel.com/blog/2017/11/27/#011_faster_package_installation_one) by Dirk Eddelbuettel as a reference.
 
-## 4.2 RStudio
+Next, install the "Intel MKL" or "openblas" library to be used in favor of "libRlapack/libRblas" in R.
+
+These libraries are responsible for numerical computations.
+The "Intel MKL" library has [impressive speedups](http://pacha.hk/2017-12-02_why_is_r_slow.html) compared to the default ones "libRlapack/libRblas".
+Thanks @marcosci for the hint :yellowheart:
+
+**Note:** The download size of `intel-mkl` is around 4 GB and takes a lot of memory during installation.
+Most of it will stored in the swap (around 10 GB) so make sure your SWAP space is > 10 GB.
+
+If you cannot install `intel-mkl`, try `libopenblas`: `pac install openblas-lapack`.
+It does not require a full re-installation of R from source and simply auto-detects the `openblas` library.
+
+Also to successfully install `intel-mkl`, you need to temporarly increase the `/tmp` directory as `intel-mkl` needs quite some space: `sudo mount -o remount,size=20G,noatime /tmp`.
+
+Fortunately, there is an AUR package that wraps the R installation with the `intel-mkl` installation:
+
+```
+pac install r-mkl
+```
+
+**Note:** Currently you need to edit the `r-mkl` PKGBUILD during installation and comment some lines.
+So do `pac install --noedit=0 r-mkl` and then:
+
+```
+# check() {
+#   cd R-${pkgver}
+#   make check-recommended
+# }
+```
+
+## 4.2 R & RStudio
+
+Install R: `pac install r`.
 
 Use `pac search rstudio` and pick your favorite release channel.
+During installation R will get installed as a dependency (if you have not already done so).
 
 ## 4.3 Packages
 
@@ -284,12 +318,12 @@ Follow the instructions to set up a valid `GITHUB_PAT` environment variable that
 
 ### 4.3.1 Task view "Spatial"
 
-Of course you it is not required to install all packages of a task view. 
+Of course you it is not required to install all packages of a task view.
 You will never use all packages of a task view.
 In my opinion, however, it is pretty neat to have one command that install (almost) all packages I use of a certain field.
 I do not care about the additional packages installed.
 
-Required system libraries: 
+Required system libraries:
 
 * jq (`pac install jq`)
 * fortran (`pac install gcc-fortran`)
@@ -298,7 +332,7 @@ Required system libraries:
 * nlopt (`pac install nlopt`)
 * gsl (`pac install gsl`)
 
-Some R packages (`geojsonlite`, etc.) require the `V8` [package](https://github.com/jeroen/V8) which depends on the outdated `v8-314` library. 
+Some R packages (`geojsonlite`, etc.) require the `V8` [package](https://github.com/jeroen/V8) which depends on the outdated `v8-314` library.
 
 For `rJava` we need to do `sudo R CMD javareconf`.
 
@@ -313,7 +347,7 @@ Packages that error during installation (Please report back if you have a workin
 
 ### 4.3.2 Task view "Machine Learning"
 
-Required system libraries: 
+Required system libraries:
 
 * `pac install nlopt`
 
@@ -356,7 +390,7 @@ Terminal applications are capable of storing "Profiles" that save the configurat
 
 1. Create a profile for each server
 2. Under `<profile name> -> Command -> [x] Run a custom command instead of my shell` put your `ssh` command in, e.g. `ssh <username>@<servername>`.
-3. Open all profiles in tabs: Select the desired profile and click "New session" (the left one of the three buttons at the top). 
+3. Open all profiles in tabs: Select the desired profile and click "New session" (the left one of the three buttons at the top).
 
 ![](figs/tilix1.png)
 
@@ -392,7 +426,7 @@ Now all you need to do is typing `servers` to load a terminal configuration with
 
 ## KDE
 
-If you want to use an automatic login to a VPN and the networkmanager-daemon (e.g. Openconnect) does not store your password, try the `network-manager-applet` package. 
+If you want to use an automatic login to a VPN and the networkmanager-daemon (e.g. Openconnect) does not store your password, try the `network-manager-applet` package.
 It is the GNOME network-manager and has for some reason no problems with storing the password.
 
 # 7. Laptop battery life optimization
@@ -404,7 +438,7 @@ There are two main power optimization tools:
 * Powertop
 * TLP
 
-I prefer `tlp` as `powertop`often causes trouble with USB devices going into sleep mode. 
+I prefer `tlp` as `powertop`often causes trouble with USB devices going into sleep mode.
 Also, applying the changes on boot is easier with `tlp`.
 
 `pac install tlp`
@@ -418,7 +452,7 @@ Then follow the instructions on [TLP - ArchWiki](https://wiki.archlinux.org/inde
 
 ## 8.1 arara
 
-[GitHub - cereda/arara: arara is a TeX automation tool based on rules and directives.](https://github.com/cereda/arara)  
+[GitHub - cereda/arara: arara is a TeX automation tool based on rules and directives.](https://github.com/cereda/arara)
 An automatization tool for TeX: `pac install arara-git`
 
 ## 8.2 latexindent.pl: Required perl modules
