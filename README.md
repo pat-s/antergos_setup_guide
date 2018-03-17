@@ -1,4 +1,4 @@
-**Last update: March 10 2018**
+**Last update: March 17 2018**
 
 This guide does not claim to be complete.
 It reflects my view on how to setup a working Arch Linux system tailored towards data science, R and spatial analysis.
