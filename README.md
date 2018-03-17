@@ -288,7 +288,7 @@ It is completely free and also relies heavily on user packages.
 However, finding properly maintained packages is a bit tedious.
 Once configured correctly, it does a great job for all kind of writing (LaTeX, Markdown) as it has some neat packages for auto-reload of HTML and PDF files.
 I usually have two panes open: On the left I edit my document and on the right I have the live preview.
-You can check [my settings](https://gist.github.com/pat-s/7cb029b98f66f0783f90b5744ad2bcce) and discover some packages that you may find useful.
+You can check [my settings](https://gist.github.com/pat-s/7cb029b98f66f0783f90b5744ad2bcce) and [discover some packages](https://www.shopify.com/partners/blog/best-atom-packages-2017) that you may find useful.
 
 # 4. R
 
