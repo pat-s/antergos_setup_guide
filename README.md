@@ -24,9 +24,12 @@ Enjoy Linux! :kissing_smiling_eyes:
    * [3. System related](#3-system-related)
       * [3.1 Installing system libraries](#31-installing-system-libraries)
       * [3.2 Apps](#32-apps)
+      * [3.3 Editors](#33-editors)
+         * [3.3.1 Sublime Text 3](#331-sublime-text-3)
+         * [3.3.2 Atom](#332-atom)
    * [4. R](#4-r)
       * [4.1 General](#41-general)
-      * [4.2 RStudio](#42-rstudio)
+      * [4.2 R &amp; RStudio](#42-r--rstudio)
       * [4.3 Packages](#43-packages)
          * [4.3.1 Task view "Spatial"](#431-task-view-spatial)
          * [4.3.2 Task view "Machine Learning"](#432-task-view-machine-learning)
@@ -41,7 +44,7 @@ Enjoy Linux! :kissing_smiling_eyes:
       * [8.2 latexindent.pl: Required perl modules](#82-latexindentpl-required-perl-modules)
       * [8.3 Editor schemes](#83-editor-schemes)
 
-<!-- Added by: pjs, at: 2018-03-10T13:02+01:00 -->
+<!-- Added by: pjs, at: 2018-03-17T14:07+01:00 -->
 
 <!--te-->
 
@@ -227,7 +230,7 @@ Notes: `pac install boostnote`
 Reference Manager: `pac install Jabref`
 Google Drive: `pac install insync`
 Dropbox: `pac install dropbox-nautilus`
-GIS: `pac install qgis` (careful, takes > 30min - 1h to compile)
+GIS: `pac install qgis` (careful, takes 30 min - 1h to compile)
 
 **Tip:** You can install both `QGIS2` and `QGIS3` and switch between them.
 To do so you need to build both once with `--movepkg` option from `trizen`.
@@ -248,6 +251,44 @@ Terminal: `pac install tilix`
 Browser: `pac install vivaldi-snapshot`
 Dock: `pac install latte-dock` ([KDE only] If you prefer a dock layout over the default layout)
 Twitter client: `pac install corebird`
+
+## 3.3 Editors
+
+**Note:** This section may change over time as I categorize myself as a beginner in the wide world of editors.
+
+Editors are an important topic so I devote an extra section to them.
+You can use editors to only edit text files but they can also be used as an IDE for coding.
+There are many editors out there, all loved by a certain amount of people.
+
+Here's a list of the most common ones (this list does not claim to be complete):
+
+* Vim
+* Emacs
+* Sublime Text
+* Atom
+* Kate (KDE default)
+* Nano
+* etc.
+
+Some are more tailored towards programmers and command-line action, some are more tailored towards a nice GUI experience.
+
+### 3.3.1 Sublime Text 3
+
+Recently I started to use [Sublime Text 3](www.sublimetext.com) as my system editor.
+This means all files that are not bound to a different application are opened by SublimeText3.
+Although SublimeText is not free anymore since v3, you can find free license keys on the web.
+I like it because its very fast, has nice extensions (packages that are well maintained) and comes with a killer feature (for all server admins): Opening of remote files via [rsub/rmate](https://github.com/henrikpersson/rsub).
+You can find my user settings [here](https://gist.github.com/pat-s/b6026fa370193b8ce260b0115903e022).
+A downside is that is is not capable of displaying HTML or PDF files and does not come with an auto-compile feature if you are editing markdown files.
+
+### 3.3.2 Atom
+
+Thats why I use [Atom](https://atom.io) for all text editing + compiling.
+It is completely free and also relies heavily on user packages.
+However, finding properly maintained packages is a bit tedious.
+Once configured correctly, it does a great job for all kind of writing (LaTeX, Markdown) as it has some neat packages for auto-reload of HTML and PDF files.
+I usually have two panes open: On the left I edit my document and on the right I have the live preview.
+You can check [my settings](https://gist.github.com/pat-s/7cb029b98f66f0783f90b5744ad2bcce) and discover some packages that you may find useful.
 
 # 4. R
 
@@ -459,10 +500,7 @@ An automatization tool for TeX: `pac install arara-git`
 
 `latexindent` is a library which automatically indents your LaTeX document during compilation: [GitHub - cmhughes/latexindent.pl](https://github.com/cmhughes/latexindent.pl)
 
-`pac install perl-log-dispatch`
-`pac install perl-dbix-log4perl`
-`pac install perl-file-homedir`
-`pac install perl-unicode-linebreak`
+`pac install perl-log-dispatch perl-dbix-log4perl perl-file-homedir perl-unicode-linebreak`
 
 ## 8.3 Editor schemes
 
