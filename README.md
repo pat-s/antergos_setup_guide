@@ -15,6 +15,8 @@ Enjoy Linux! :kissing_smiling_eyes:
 # Table of Contents
 
 <!--ts-->
+         * [Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis](#antergosarch-linux-setup-guide-tailored-towards-data-science-r-and-spatial-analysis)
+   * [Table of Contents](#table-of-contents)
    * [1. Installation](#1-installation)
       * [1.1 Install options](#11-install-options)
       * [1.2 Setting up the partitions](#12-setting-up-the-partitions)
@@ -27,6 +29,7 @@ Enjoy Linux! :kissing_smiling_eyes:
       * [3.3 Editors](#33-editors)
          * [3.3.1 Sublime Text 3](#331-sublime-text-3)
          * [3.3.2 Atom](#332-atom)
+      * [3.4 Office](#34-office)
    * [4. R](#4-r)
       * [4.1 General](#41-general)
       * [4.2 R &amp; RStudio](#42-r--rstudio)
@@ -43,8 +46,10 @@ Enjoy Linux! :kissing_smiling_eyes:
       * [8.1 arara](#81-arara)
       * [8.2 latexindent.pl: Required perl modules](#82-latexindentpl-required-perl-modules)
       * [8.3 Editor schemes](#83-editor-schemes)
+      * [8.4 Fonts](#84-fonts)
+      * [8.5 Icon themes](#85-icon-themes)
 
-<!-- Added by: pjs, at: 2018-03-17T14:07+01:00 -->
+<!-- Added by: pjs, at: 2018-03-17T20:09+01:00 -->
 
 <!--te-->
 
@@ -290,6 +295,22 @@ Once configured correctly, it does a great job for all kind of writing (LaTeX, M
 I usually have two panes open: On the left I edit my document and on the right I have the live preview.
 You can check [my settings](https://gist.github.com/pat-s/7cb029b98f66f0783f90b5744ad2bcce) and [discover some packages](https://www.shopify.com/partners/blog/best-atom-packages-2017) that you may find useful.
 
+## 3.4 Office
+
+`pac install libreoffice-fresh`
+
+If you are on a KDE Desktop, Libreoffice may flicker black/white.
+This is caused by OpenGl.
+
+To solve it, set the `value` item in following two lines of `~/.config/libreoffice/4/user/registrymodifications.xcu` to `false`:
+
+```html
+<item oor:path="/org.openoffice.Office.Common/VCL"><prop oor:name="ForceOpenGL" oor:op="fuse"><value>false</value></prop></item>
+<item oor:path="/org.openoffice.Office.Common/VCL"><prop oor:name="UseOpenGL" oor:op="fuse"><value>false</value></prop></item>
+```
+
+Additionally, I recommend to install the "Papirus Icon theme" for Libreoffice: `pac install papirus-libreoffice-theme`.
+
 # 4. R
 
 ## 4.1 General
@@ -506,3 +527,17 @@ An automatization tool for TeX: `pac install arara-git`
 
 I use the [Dracula](https://draculatheme.com) scheme in almost all applications.
 While its comes integrated into RStudio, here are installation instructions for [Kate](https://draculatheme.com/kate/) and [Tilix](https://github.com/krzysztofzuraw/dracula-tilix).
+
+## 8.4 Fonts
+
+I enjoy using [Fira Code](https://github.com/tonsky/FiraCode).
+I use it as a coding font in all editors (monospace ftw) but also as a system wide font (the "medium" variant) with size 10.
+
+`pac search fira-code`
+
+## 8.5 Icon themes
+
+There are two awesome icon themes: [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) and [numix](http://numixproject.org).
+
+Try them and choose for yourself.
+You will see what a tremendous impact good icons can have on your daily work.
