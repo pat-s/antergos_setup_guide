@@ -15,8 +15,6 @@ Enjoy Linux! :kissing_smiling_eyes:
 # Table of Contents
 
 <!--ts-->
-         * [Antergos/Arch Linux setup guide tailored towards data science, R and spatial analysis](#antergosarch-linux-setup-guide-tailored-towards-data-science-r-and-spatial-analysis)
-   * [Table of Contents](#table-of-contents)
    * [1. Installation](#1-installation)
       * [1.1 Install options](#11-install-options)
       * [1.2 Setting up the partitions](#12-setting-up-the-partitions)
@@ -222,7 +220,7 @@ Other important system libraries:
 * `pac install postgis`
 * `pac install jdk8-openjdk openjdk8-src`(jdk9 still has problems with some R packages)
 * `pac install texlive-most` (this is a wrapper installation that installs the most important tex libraries. Similar to `texlive-full` on other Linux distributions.)
-* `pac install pandoc-bin pandoc-citeproc-bin12` (for all kind of Rmarkdown stuff. Make sure to install this library as the one in the community repository comes with 1 GB Haskell dependencies!)
+* `pac install pandoc-bin pandoc-citeproc-bin` (for all kind of Rmarkdown stuff. Make sure to install this library as the one in the community repository comes with 1 GB Haskell dependencies!)
 * `pac install hugo` (if you are a blogger using the R package `blogdown`)
 
 ## 3.2 Apps
