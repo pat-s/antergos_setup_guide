@@ -210,7 +210,7 @@ Always install them via your package manager, e.g. for `numpy`: `pac install pyt
 Python Modules for QGIS: QGIS needs some external python libraries to not throw errors on startup:
 
 ```
-pac install python-gdal python-gdal python-yaml python-yaml python-jinja python-psycopg2 python-owslib python-numpy python-pygments
+pac install python-gdal python-yaml python-jinja python-psycopg2 python-owslib python-numpy python-pygments
 ```
 
 Other important system libraries:
