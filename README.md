@@ -1,4 +1,4 @@
-**Last update: March 17 2018**
+**Last update: March 23 2018**
 
 This guide does not claim to be complete.
 It reflects my view on how to setup a working Arch Linux system tailored towards data science, R and spatial analysis.
@@ -313,14 +313,11 @@ Additionally, I recommend to install the "Papirus Icon theme" for Libreoffice: `
 
 ## 4.1 General
 
+**ccache**
+
 For fast package (re-)installation using `ccache`, put the following into `~/.R/Makevars`:
 
 ```r
-CXXFLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function
-
-CXXFLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION
-
-# Eddelbuettel blog
 VER=
 CCACHE=ccache
 CC=$(CCACHE) gcc$(VER)
@@ -334,27 +331,45 @@ F77=$(CCACHE) gfortran$(VER)
 Additionally, install `ccache` on your system: `pac install ccache`.
 See [this blog post](http://dirk.eddelbuettel.com/blog/2017/11/27/#011_faster_package_installation_one) by Dirk Eddelbuettel as a reference.
 
-Next, install the "Intel MKL" or "openblas" library to be used in favor of "libRlapack/libRblas" in R.
+**Openblas / LAPACK**
 
-These libraries are responsible for numerical computations.
-The "Intel MKL" library has [impressive speedups](http://pacha.hk/2017-12-02_why_is_r_slow.html) compared to the default ones "libRlapack/libRblas".
+Next, install either "Intel MKL" or `libopenblas` to be used in favor of "libRlapack/libRblas" in R.
+
+These libraries are responsible for numerical computations and have [impressive speedups](http://pacha.hk/2017-12-02_why_is_r_slow.html) compared to the default ones being used by R.
 Thanks @marcosci for the hint :yellowheart:
 
-**Note:** The download size of `intel-mkl` is around 4 GB and takes a lot of memory during installation.
-Most of it will stored in the swap (around 10 GB) so make sure your SWAP space is > 10 GB.
+While the "Intel MKL" library is the fasted according to the benchmarks, its also much more complicated to install.
+Although for Arch an AUR package exists, I encountered issues while using it:
+* On the desktop site, I was unable to build my `pkgdown` site because it got stuck during building man pages.
+* On the server side (Debian 9), my processes also just randomly got stuck at some point without providing any information on the cause.
+Both problems did not occur with `libopenblas` so I highly recommend going with this one.
 
-If you cannot install `intel-mkl`, try `libopenblas`: `pac install openblas-lapack`.
-It does not require a full re-installation of R from source and simply auto-detects the `openblas` library.
+`libopenblas` will automatically be used if its installed.
+I recommend installing the AUR package `openblas-lapack` as its package cominbing multiple libraries: `pac install openblas-lapack`.
+
+To verify your installation in `R`, simply run `sessionInfo()` and check the printed information:
+
+```r
+sessionInfo()
+
+R version 3.4.4 (2018-03-15)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Arch Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib/libopenblas_haswellp-r0.2.20.so
+```
+
+Nevertheless, if you want to try out the "Intel-MKL" library, follow these instructions:
+
+There is an AUR package that provides `R` compiled with `intel-mkl` named `r-mkl`.
+
+**Note 1:** The download size of `intel-mkl` is around 4 GB and takes a lot of memory during installation.
+Most of it will stored in the swap (around 10 GB) so make sure your SWAP space is > 10 GB.
 
 Also to successfully install `intel-mkl`, you need to temporarly increase the `/tmp` directory as `intel-mkl` needs quite some space: `sudo mount -o remount,size=20G,noatime /tmp`.
 
-Fortunately, there is an AUR package that wraps the R installation with the `intel-mkl` installation:
-
-```
-pac install r-mkl
-```
-
-**Note:** Currently you need to edit the `r-mkl` PKGBUILD during installation and comment some lines.
+**Note 2:** Currently, you need to edit the `r-mkl` PKGBUILD during installation and comment some lines.
 So do `pac install --noedit=0 r-mkl` and then:
 
 ```
