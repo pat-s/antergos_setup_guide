@@ -344,7 +344,7 @@ Although for Arch an AUR package exists, I encountered issues while using it:
 * On the server side (Debian 9), my processes also just randomly got stuck at some point without providing any information on the cause.
 Both problems did not occur with `libopenblas` so I highly recommend going with this one.
 
-`libopenblas` will automatically be used if its installed.
+`libopenblas` will automatically be used if its installed since the default `R` installation [on Arch](https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/r) is configured with the `--with-blas` option (see section A.3.1 in https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installation).
 I recommend installing the AUR package `openblas-lapack` as its package cominbing multiple libraries: `pac install openblas-lapack`.
 
 To verify your installation in `R`, simply run `sessionInfo()` and check the printed information:
